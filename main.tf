@@ -44,7 +44,7 @@ resource "aws_route_table" "second" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.vpc_internet_gw.id}"
+    gateway_id = aws_internet_gateway.vpc_internet_gw.id
   }
 
   tags = {
@@ -55,7 +55,7 @@ resource "aws_route_table" "second" {
 # Assosiate second route table with the Public Subnet
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.subnet[0].id
-  route_table_id = "${aws_route_table.second.id}"
+  route_table_id = aws_route_table.second.id
 }
 
 # Create route to NAT GW for Private Subnets
@@ -67,7 +67,6 @@ resource "aws_route" "internet_access_through_nat_gw" {
 
 # Assosiate main route tables with Private subnets
 resource "aws_route_table_association" "private" {
-  #count          = (length(aws_subnet.subnet) - 1)
   count          = (length(var.vpc_subnet_cidr_blocks) - 1)
   subnet_id      = aws_subnet.subnet[(count.index + 1)].id
   route_table_id = aws_vpc.vpc.main_route_table_id
