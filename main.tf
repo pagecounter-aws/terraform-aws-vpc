@@ -35,7 +35,7 @@ resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_gw_ip.id
   # The Subnet ID of the subnet in which to place the gateway. In this case it will be always the first subnet
   subnet_id     = aws_subnet.subnet[0].id
-  depends_on    = ["aws_internet_gateway.vpc_internet_gw"]
+  depends_on    = [ aws_internet_gateway.vpc_internet_gw ]
 }
 
 # Create second route table and route for Internet GW for the Public Subnet within VPC
